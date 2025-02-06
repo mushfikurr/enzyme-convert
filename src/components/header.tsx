@@ -11,7 +11,7 @@ export function Header({ loaded }: { loaded: boolean }) {
         </h1>
         <div
           className={cn(
-            "h-2 w-2 rounded-full mt-[4px]",
+            "h-2 w-2 rounded-full mt-[3.5px]",
             loaded
               ? "bg-green-500 shadow-[0px_0px_10px_0px_rgba(34,197,94,1)]"
               : "bg-muted"

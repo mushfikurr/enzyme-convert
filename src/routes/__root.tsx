@@ -37,7 +37,9 @@ function RootComponent() {
       </div>
       <ByMshfr />
       <GridBackground />
-      <TanStackRouterDevtools position="bottom-right" />
+      {process.env.NODE_ENV === "development" && (
+        <TanStackRouterDevtools position="bottom-right" />
+      )}
     </>
   );
 }
