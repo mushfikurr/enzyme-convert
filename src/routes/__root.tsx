@@ -28,8 +28,8 @@ function RootComponent() {
 
   return (
     <>
-      <div className="w-full min-h-screen flex flex-col p-6 gap-6 items-center justify-center relative">
-        <div className="w-full max-w-md space-y-6">
+      <div className="w-full min-h-screen flex flex-col gap-6 items-center justify-center relative">
+        <div className="w-full max-w-md space-y-6 p-6">
           <Header loaded={loaded} />
           <ConvertCard />
           <ConvertSettings {...conversionParams} />
@@ -37,9 +37,6 @@ function RootComponent() {
       </div>
       <ByMshfr />
       <GridBackground />
-      {process.env.NODE_ENV === "development" && (
-        <TanStackRouterDevtools position="bottom-right" />
-      )}
     </>
   );
 }
