@@ -6,8 +6,8 @@ import { GridBackground } from "@/components/ui/grid-background";
 import { useFfmpeg } from "@/lib/hooks/ffmpeg/useFfmpeg";
 import { schema } from "@/lib/schema/conversion-types";
 import { createRootRoute, stripSearchParams } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { zodValidator } from "@tanstack/zod-adapter";
+import { Toaster } from "@/components/ui/sonner";
 
 const DEFAULT_CONVERSION_PARAMS = {
   source: "",
@@ -37,6 +37,7 @@ function RootComponent() {
       </div>
       <ByMshfr />
       <GridBackground />
+      <Toaster richColors position={"top-center"} closeButton />
     </>
   );
 }
