@@ -30,5 +30,5 @@ export const schema = {
         return false;
       }
       return true;
-    }, "This is the max file size allowed."),
+    }, "Your file is greater than the max file size allowed."),
 };

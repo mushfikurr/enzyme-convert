@@ -14,7 +14,7 @@ export const useConvertDropzone = () => {
 
   const onDropAccepted = useCallback((acceptedFiles: File[]) => {
     acceptedFiles.forEach((file) => {
-      toast.success(`${file.name} uploaded for conversion.`);
+      toast.success(`${file.name} ready for conversion.`);
     });
   }, []);
 
