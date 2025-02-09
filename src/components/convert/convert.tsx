@@ -9,9 +9,24 @@ import {
   CardTitle,
 } from "../ui/card";
 
-export default function ConvertCard() {
+type ConvertCardProps = {
+  handleTranscode: (file: File, targetExtension: string) => void;
+  targetExtension: string;
+  loading: boolean;
+};
+
+export default function ConvertCard({
+  handleTranscode,
+  targetExtension,
+  loading,
+}: ConvertCardProps) {
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
     useConvertDropzone();
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    handleTranscode(acceptedFiles[0], targetExtension);
+  };
 
   return (
     <Card
@@ -33,6 +48,8 @@ export default function ConvertCard() {
           size="sm"
           className="font-bold"
           disabled={!acceptedFiles.length}
+          onClick={handleClick}
+          loading={loading}
         >
           convert anything
         </Button>

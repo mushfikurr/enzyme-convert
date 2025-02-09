@@ -1,3 +1,4 @@
+import { allowedExtensions } from "@/lib/hooks/ffmpeg/allowed-extensions";
 import { schema } from "@/lib/schema/conversion-types";
 import { z } from "zod";
 import {
@@ -7,13 +8,34 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
-import { allowedExtensions } from "@/lib/hooks/ffmpeg/allowed-extensions";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { useNavigate } from "@tanstack/react-router";
 
 type ConversionParams = z.infer<typeof schema.conversionParams>;
 
 export default function ConvertSettings(props: ConversionParams) {
   const { source, target } = props;
+  const navigate = useNavigate();
+
+  const getAvailableExtensions = (
+    extensionType: keyof typeof allowedExtensions
+  ) => {
+    return allowedExtensions[extensionType];
+  };
+
+  const handleSourceChange = (value: string) => {
+    navigate({ to: ".", search: { source: value, target } });
+  };
+
+  const handleTargetChange = (value: string) => {
+    navigate({ to: ".", search: { source, target: value } });
+  };
 
   return (
     <Card className="w-full">
@@ -23,10 +45,12 @@ export default function ConvertSettings(props: ConversionParams) {
       </CardHeader>
       <CardContent className="text-sm">
         <div className="flex items-center gap-3">
-          <Select>
-            <SelectTrigger className="w-[180px]" />
+          <Select onValueChange={handleSourceChange} value={source}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="source format" />
+            </SelectTrigger>
             <SelectContent>
-              {allowedExtensions.video.map((e) => (
+              {getAvailableExtensions("image").map((e) => (
                 <SelectItem key={e} value={e}>
                   {e}
                 </SelectItem>
@@ -34,12 +58,16 @@ export default function ConvertSettings(props: ConversionParams) {
             </SelectContent>
           </Select>
           <p>to</p>
-          <Select>
-            <SelectTrigger className="w-[180px]" />
+          <Select onValueChange={handleTargetChange} value={target}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="target format" />
+            </SelectTrigger>
             <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
+              {getAvailableExtensions("image").map((e) => (
+                <SelectItem key={e} value={e}>
+                  {e}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

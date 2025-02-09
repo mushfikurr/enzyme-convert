@@ -5,9 +5,13 @@ No-nonsense, universal file converter using ffmpeg.wasm.
 Built with Vite, React, and TypeScript.
 
 ## TODO
-
-- Deploy on netlify
-- Add file reading with react-dropzone & ffmpeg.wasm
-- Make extensions react to file type, only showing allowed filetypes
+- Implement dexie
+- Add a validation to reject multiple file extensions (only one file extension allowed)
+- Allow multiple file extensions
 - Global settings to toggle things like showing output stream from ffmpeg
 - Sound effects ???
+- Type all available extensions?
+- Different browsers support return different mimetypes.
+
+---
+---

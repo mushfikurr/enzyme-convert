@@ -24,14 +24,18 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   const conversionParams = Route.useSearch();
-  const { status, loaded } = useFfmpeg();
+  const { loaded, handleTranscode, processing } = useFfmpeg();
 
   return (
     <>
       <div className="w-full min-h-screen flex flex-col gap-6 items-center justify-center relative">
         <div className="w-full max-w-md space-y-6 p-6">
           <Header loaded={loaded} />
-          <ConvertCard />
+          <ConvertCard
+            handleTranscode={handleTranscode}
+            targetExtension={conversionParams.target}
+            loading={processing}
+          />
           <ConvertSettings {...conversionParams} />
         </div>
       </div>
