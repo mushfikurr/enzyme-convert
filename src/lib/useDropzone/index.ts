@@ -1,8 +1,9 @@
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { FileError, FileRejection, useDropzone } from "react-dropzone";
 import { toast } from "sonner";
+import { mutations } from "../db/actions/mutations";
 import { schema } from "../schema/conversion-types";
-import { useNavigate, useSearch } from "@tanstack/react-router";
 
 export const useConvertDropzone = () => {
   const navigate = useNavigate();
@@ -24,6 +25,8 @@ export const useConvertDropzone = () => {
         to: ".",
         search: { ...searchParams, source: sourceWithExtension },
       });
+
+      mutations.addFile(file);
       toast.success(`${file.name} is ready for conversion.`);
     });
   }, []);

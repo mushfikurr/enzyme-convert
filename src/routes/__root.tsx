@@ -8,6 +8,8 @@ import { schema } from "@/lib/schema/conversion-types";
 import { createRootRoute, stripSearchParams } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { Toaster } from "@/components/ui/sonner";
+import { useEffect } from "react";
+import db from "@/lib/db/db";
 
 const DEFAULT_CONVERSION_PARAMS = {
   source: "",
@@ -25,6 +27,12 @@ export const Route = createRootRoute({
 function RootComponent() {
   const conversionParams = Route.useSearch();
   const { loaded, handleTranscode, processing } = useFfmpeg();
+
+  useEffect(() => {
+    db.open().catch((error) => {
+      console.error("Failed to open database:", error);
+    });
+  }, []);
 
   return (
     <>

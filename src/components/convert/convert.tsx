@@ -8,9 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { FileRecord } from "@/lib/db/types";
+import { queries } from "@/lib/db/actions/queries";
+import { useSearch } from "@tanstack/react-router";
 
 type ConvertCardProps = {
-  handleTranscode: (file: File, targetExtension: string) => void;
+  handleTranscode: (file: FileRecord, targetExtension: string) => void;
   targetExtension: string;
   loading: boolean;
 };
@@ -22,10 +25,14 @@ export default function ConvertCard({
 }: ConvertCardProps) {
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
     useConvertDropzone();
+  const searchParams = useSearch({ from: "__root__" });
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    handleTranscode(acceptedFiles[0], targetExtension);
+    const fileRecord = await queries.getLatestFileRecord();
+    if (fileRecord) {
+      handleTranscode(fileRecord, targetExtension);
+    }
   };
 
   return (
@@ -47,11 +54,15 @@ export default function ConvertCard({
         <Button
           size="sm"
           className="font-bold"
-          disabled={!acceptedFiles.length}
+          disabled={
+            !acceptedFiles.length ||
+            searchParams.source === "" ||
+            searchParams.target === ""
+          }
           onClick={handleClick}
           loading={loading}
         >
-          convert anything
+          convert
         </Button>
       </CardFooter>
     </Card>

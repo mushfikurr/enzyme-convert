@@ -3,11 +3,10 @@ export interface FileRecord {
   name: string;
   size: number;
   type: string;
-  status: "pending" | "completed" | "failed";
+  status: "pending" | "completed" | "failed" | "not started" | "in progress";
   progress: number;
   createdAt: Date;
   convertedName?: string | null;
   convertedType?: string | null;
-  conversionStatus: "not started" | "in progress" | "completed" | "failed";
   fileData: ArrayBuffer;
 }
