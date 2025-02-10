@@ -17,8 +17,8 @@ export function useFfmpeg() {
   const load = async () => {
     const canMultithread = canSharedArrayBuffersRun();
     const baseURL = canMultithread
-      ? "https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm"
-      : "https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm'";
+      ? "https://unpkg.com/@ffmpeg/core-mt@0.12.10/dist/esm"
+      : "https://unpkg.com/@ffmpeg/core@0.12.10/dist/esm'";
     const ffmpeg = ffmpegRef.current;
     ffmpeg.on("log", ({ message }) => {
       setStatus(message);

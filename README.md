@@ -19,4 +19,6 @@ Built with Vite, React, and TypeScript.
 
 ---
 
+## Notes for myself:
+
 ---
