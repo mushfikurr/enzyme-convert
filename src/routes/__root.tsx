@@ -10,6 +10,7 @@ import { zodValidator } from "@tanstack/zod-adapter";
 import { Toaster } from "@/components/ui/sonner";
 import { useEffect } from "react";
 import db from "@/lib/db/db";
+import Processing from "@/components/processing";
 
 const DEFAULT_CONVERSION_PARAMS = {
   source: "",
@@ -44,6 +45,7 @@ function RootComponent() {
             targetExtension={conversionParams.target}
             loading={processing}
           />
+          <Processing />
           <ConvertSettings {...conversionParams} />
         </div>
       </div>

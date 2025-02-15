@@ -5,24 +5,35 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { transcode } from "./actions/transcode";
 import { canSharedArrayBuffersRun } from "./can-shared-array-buffers-run";
+import { queries } from "@/lib/db/actions/queries";
+import { mutations } from "@/lib/db/actions/mutations";
+import { handleFFmpegAction } from "./util/process-with-ffmpeg";
 
 export type FFmpegRefType = React.RefObject<FFmpeg>;
 
 export function useFfmpeg() {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [processing, setProcessing] = useState<boolean>(false);
-  const [status, setStatus] = useState<string>();
+  const [ffmpegStatus, setFfmpegStatus] = useState<string>();
   const ffmpegRef = useRef(new FFmpeg());
 
   const load = async () => {
     const canMultithread = canSharedArrayBuffersRun();
     const baseURL = canMultithread
-      ? "https://unpkg.com/@ffmpeg/core-mt@0.12.10/dist/esm"
+      ? "https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm"
       : "https://unpkg.com/@ffmpeg/core@0.12.10/dist/esm";
     const ffmpeg = ffmpegRef.current;
     ffmpeg.on("log", ({ message }) => {
-      setStatus(message);
-      console.log(message);
+      console.log("log", message);
+      setFfmpegStatus(message);
+    });
+
+    ffmpeg.on("progress", async ({ progress, time }) => {
+      const fileRecord = await queries.getLatestInProgressFileRecord();
+      if (fileRecord) {
+        console.log("progress", progress);
+        mutations.updateFileRecordProgress(fileRecord.id!, progress);
+      }
     });
 
     const loadOptions: FFMessageLoadConfig = {
@@ -51,22 +62,15 @@ export function useFfmpeg() {
     }
   }, [ffmpegRef]);
 
-  const handleAction = async <T extends (...args: any[]) => Promise<any>>(
-    fn: T,
-    ...args: Parameters<T>
-  ) => {
-    setProcessing(true);
-    try {
-      await fn(...args);
-    } finally {
-      setProcessing(false);
-    }
-  };
-
   const actions = {
-    handleTranscode: async (file: FileRecord, targetExtension: string) =>
-      await handleAction(transcode, file, targetExtension, ffmpegRef),
+    handleTranscode: async (files: FileRecord[], targetExtension: string) =>
+      await handleFFmpegAction(
+        files,
+        ffmpegRef.current,
+        transcode(ffmpegRef.current),
+        targetExtension
+      ),
   };
 
-  return { ...actions, processing, loaded, status };
+  return { ...actions, processing, loaded, status: ffmpegStatus };
 }

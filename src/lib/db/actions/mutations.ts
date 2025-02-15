@@ -1,5 +1,5 @@
 import db from "../db";
-import { FileRecord } from "../types";
+import { FileRecord, Status } from "../types";
 
 type UpdateFileInfoParams = Pick<
   FileRecord,
@@ -7,7 +7,7 @@ type UpdateFileInfoParams = Pick<
 >;
 
 export const mutations = {
-  addFile: async (file: File) => {
+  addFileRecord: async (file: File) => {
     try {
       const fileData = await file.arrayBuffer();
       const id = await db.files.add({
@@ -28,7 +28,42 @@ export const mutations = {
     }
   },
 
-  updateFileInfo: async (fileId: number, params: UpdateFileInfoParams) => {
+  removeFileRecord: async (fileId: number) => {
+    try {
+      await db.files.delete(fileId);
+    } catch (error) {
+      console.error("Error removing file:", error);
+      throw new Error("Failed to remove file");
+    }
+  },
+
+  removeAllCompletedFileRecords: async () => {
+    try {
+      const processedFileRecords = await db.files
+        .where("status")
+        .equals("completed")
+        .toArray();
+      await db.files.bulkDelete(processedFileRecords.map((file) => file.id));
+    } catch (error) {
+      console.error("Error removing completed files:", error);
+      throw new Error("Failed to remove completed files");
+    }
+  },
+
+  removeAllFileRecords: async () => {
+    try {
+      const fileRecords = await db.files.toArray();
+      await db.files.bulkDelete(fileRecords.map((file) => file.id));
+    } catch (error) {
+      console.error("Error removing all files:", error);
+      throw new Error("Failed to remove all files");
+    }
+  },
+
+  updateFileRecordInfo: async (
+    fileId: number,
+    params: UpdateFileInfoParams
+  ) => {
     try {
       const updated = await db.files.update(fileId, {
         ...params,
@@ -39,6 +74,24 @@ export const mutations = {
     } catch (error) {
       console.error("Error updating file info:", error);
       throw new Error("Failed to update file info");
+    }
+  },
+
+  updateFileRecordStatus: async (fileId: number, status: Status) => {
+    try {
+      await db.files.update(fileId, { status });
+    } catch (error) {
+      console.error("Error updating file status:", error);
+      throw new Error("Failed to update file status");
+    }
+  },
+
+  updateFileRecordProgress: async (fileId: number, progress: number) => {
+    try {
+      await db.files.update(fileId, { progress });
+    } catch (error) {
+      console.error("Error updating file progress:", error);
+      throw new Error("Failed to update file progress");
     }
   },
 };

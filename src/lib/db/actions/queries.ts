@@ -22,6 +22,26 @@ export const queries = {
     }
   },
 
+  getFilesRecordsDescending: async (): Promise<FileRecord[]> => {
+    try {
+      const files = await db.files.orderBy("createdAt").reverse().toArray();
+      return files;
+    } catch (error) {
+      console.error("Error retrieving files:", error);
+      throw new Error("Failed to retrieve files from the database.");
+    }
+  },
+
+  getFileRecordsPending: async (): Promise<FileRecord[]> => {
+    try {
+      const files = await db.files.where("status").equals("pending").toArray();
+      return files;
+    } catch (error) {
+      console.error("Error retrieving files:", error);
+      throw new Error("Failed to retrieve files from the database.");
+    }
+  },
+
   getFileRecords: async (): Promise<FileRecord[]> => {
     try {
       const files = await db.files.toArray();
@@ -48,6 +68,30 @@ export const queries = {
     } catch (error) {
       console.error("Error retrieving the latest file:", error);
       throw new Error("Failed to retrieve the latest file from the database.");
+    }
+  },
+
+  getLatestInProgressFileRecord: async (): Promise<FileRecord | null> => {
+    try {
+      const files = await db.files
+        .where("status")
+        .equals("in progress")
+        .toArray();
+
+      if (files.length === 0) {
+        return null;
+      }
+
+      const latestFileRecord = files.toSorted((a, b) => {
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      })[0];
+
+      return latestFileRecord;
+    } catch (error) {
+      console.error("Error retrieving the latest in-progress file:", error);
+      throw new Error(
+        "Failed to retrieve the latest in-progress file from the database."
+      );
     }
   },
 };

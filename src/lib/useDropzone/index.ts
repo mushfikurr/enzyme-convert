@@ -26,8 +26,7 @@ export const useConvertDropzone = () => {
         search: { ...searchParams, source: sourceWithExtension },
       });
 
-      mutations.addFile(file);
-      toast.success(`${file.name} is ready for conversion.`);
+      mutations.addFileRecord(file);
     });
   }, []);
 

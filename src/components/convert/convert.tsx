@@ -13,7 +13,7 @@ import { queries } from "@/lib/db/actions/queries";
 import { useSearch } from "@tanstack/react-router";
 
 type ConvertCardProps = {
-  handleTranscode: (file: FileRecord, targetExtension: string) => void;
+  handleTranscode: (files: FileRecord[], targetExtension: string) => void;
   targetExtension: string;
   loading: boolean;
 };
@@ -29,9 +29,10 @@ export default function ConvertCard({
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    const fileRecord = await queries.getLatestFileRecord();
-    if (fileRecord) {
-      handleTranscode(fileRecord, targetExtension);
+    const fileRecords = await queries.getFileRecordsPending();
+    if (fileRecords) {
+      console.log("called");
+      handleTranscode(fileRecords, targetExtension);
     }
   };
 
