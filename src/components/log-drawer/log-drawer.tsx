@@ -15,17 +15,11 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Card, CardContent } from "../ui/card";
 
 export default function LogDrawer() {
-  const { setLog } = useFfmpegCtx();
-
-  const handleClearLogs = () => {
-    setLog([]);
-  };
-
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button size="icon" variant="ghost">
-          <SquareTerminal className="h-7 w-7" strokeWidth={2.5} />
+        <Button size="icon" variant="outline">
+          <SquareTerminal className="h-9 w-9" strokeWidth={2} />
         </Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -38,24 +32,37 @@ export default function LogDrawer() {
           </DrawerHeader>
           <Logs />
           <DrawerFooter>
-            <div className="flex gap-2 items-center">
-              <Button
-                variant="outline"
-                onClick={handleClearLogs}
-                className="w-full"
-              >
-                clear
-              </Button>
-              <DrawerClose asChild>
-                <Button variant="outline" className="w-full">
-                  exit
-                </Button>
-              </DrawerClose>
-            </div>
+            <DrawerActions />
           </DrawerFooter>
         </div>
       </DrawerContent>
     </Drawer>
+  );
+}
+
+function DrawerActions() {
+  const { log, setLog } = useFfmpegCtx();
+
+  const handleClearLogs = () => {
+    setLog([]);
+  };
+
+  return (
+    <div className="flex gap-2 items-center">
+      <Button
+        disabled={log.length === 0}
+        variant="outline"
+        onClick={handleClearLogs}
+        className="w-full"
+      >
+        clear
+      </Button>
+      <DrawerClose asChild>
+        <Button variant="outline" className="w-full">
+          exit
+        </Button>
+      </DrawerClose>
+    </div>
   );
 }
 

@@ -2,16 +2,16 @@ import { ByMshfr } from "@/components/by-mshfr";
 import ConvertCard from "@/components/convert";
 import ConvertSettings from "@/components/convert-settings/convert-settings";
 import { Header } from "@/components/header";
+import Processing from "@/components/processing";
 import { GridBackground } from "@/components/ui/grid-background";
-import { useFfmpeg } from "@/lib/hooks/ffmpeg/useFfmpeg";
+import { Toaster } from "@/components/ui/sonner";
+import { FfmpegProvider } from "@/lib/context/ffmpeg-context";
+import db from "@/lib/db/db";
 import { schema } from "@/lib/schema/conversion-types";
+import "@fontsource-variable/geist-mono";
 import { createRootRoute, stripSearchParams } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { Toaster } from "@/components/ui/sonner";
 import { useEffect } from "react";
-import db from "@/lib/db/db";
-import Processing from "@/components/processing";
-import { FfmpegProvider } from "@/lib/context/ffmpeg-context";
 
 const DEFAULT_CONVERSION_PARAMS = {
   source: "",
@@ -36,12 +36,10 @@ function RootComponent() {
 
   return (
     <FfmpegProvider>
-      <div className="w-full min-h-screen flex flex-col gap-6 items-center justify-center relative">
+      <div className="font-geistMono w-full min-h-screen flex flex-col gap-6 items-center justify-center relative">
         <div className="w-full max-w-md space-y-6 p-6">
           <Header />
-          <ConvertCard
-            targetExtension={conversionParams.target}
-          />
+          <ConvertCard targetExtension={conversionParams.target} />
           <Processing />
           <ConvertSettings {...conversionParams} />
         </div>
