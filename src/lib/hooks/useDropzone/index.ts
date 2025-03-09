@@ -2,8 +2,8 @@ import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { FileError, FileRejection, useDropzone } from "react-dropzone";
 import { toast } from "sonner";
-import { mutations } from "../db/actions/mutations";
-import { schema } from "../schema/conversion-types";
+import { mutations } from "../../db/actions/mutations";
+import { schema } from "../../schema/conversion-types";
 
 export const useConvertDropzone = () => {
   const navigate = useNavigate();

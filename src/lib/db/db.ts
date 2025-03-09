@@ -9,7 +9,7 @@ class MyDatabase extends Dexie {
     super("enzymeDb");
     this.version(1).stores({
       files:
-        "++id, name, size, type, status, progress, createdAt, convertedName, convertedType, conversionStatus, fileData",
+        "++id, name, size, type, status, progress, createdAt, convertedName, convertedType, conversionStatus, filePath",
     });
   }
 }

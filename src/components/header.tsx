@@ -1,8 +1,11 @@
 import { cn } from "@/lib/utils";
 import { SquareTerminal } from "lucide-react";
 import { Button } from "./ui/button";
+import { useFfmpegCtx } from "@/lib/context/ffmpeg-context";
+import LogDrawer from "./log-drawer";
 
-export function Header({ loaded }: { loaded: boolean }) {
+export function Header() {
+  const { loaded } = useFfmpegCtx();
   const titleMsg = loaded ? "ffmpeg loaded" : "waiting for ffmpeg";
   return (
     <div className="flex justify-between items-center">
@@ -21,9 +24,7 @@ export function Header({ loaded }: { loaded: boolean }) {
         ></div>
       </div>
 
-      <Button size="icon" variant="ghost">
-        <SquareTerminal className="h-7 w-7" strokeWidth={2.5} />
-      </Button>
+      <LogDrawer />
     </div>
   );
 }

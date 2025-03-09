@@ -3,6 +3,7 @@
 const VIDEO_EXTENSIONS = [
   ".mp4",
   ".mkv",
+  ".x-matroska",
   ".avi",
   ".mov",
   ".wmv",

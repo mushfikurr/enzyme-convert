@@ -15,5 +15,5 @@ export interface FileRecord {
   createdAt: Date;
   convertedName?: string | null;
   convertedType?: string | null;
-  fileData: ArrayBuffer;
+  filePath: string;
 }

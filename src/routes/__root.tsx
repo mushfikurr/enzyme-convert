@@ -11,6 +11,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { useEffect } from "react";
 import db from "@/lib/db/db";
 import Processing from "@/components/processing";
+import { FfmpegProvider } from "@/lib/context/ffmpeg-context";
 
 const DEFAULT_CONVERSION_PARAMS = {
   source: "",
@@ -27,8 +28,6 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   const conversionParams = Route.useSearch();
-  const { loaded, handleTranscode, processing } = useFfmpeg();
-
   useEffect(() => {
     db.open().catch((error) => {
       console.error("Failed to open database:", error);
@@ -36,14 +35,12 @@ function RootComponent() {
   }, []);
 
   return (
-    <>
+    <FfmpegProvider>
       <div className="w-full min-h-screen flex flex-col gap-6 items-center justify-center relative">
         <div className="w-full max-w-md space-y-6 p-6">
-          <Header loaded={loaded} />
+          <Header />
           <ConvertCard
-            handleTranscode={handleTranscode}
             targetExtension={conversionParams.target}
-            loading={processing}
           />
           <Processing />
           <ConvertSettings {...conversionParams} />
@@ -52,6 +49,6 @@ function RootComponent() {
       <ByMshfr />
       <GridBackground />
       <Toaster richColors position={"top-center"} closeButton />
-    </>
+    </FfmpegProvider>
   );
 }

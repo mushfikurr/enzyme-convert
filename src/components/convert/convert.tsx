@@ -1,4 +1,4 @@
-import { useConvertDropzone } from "@/lib/useDropzone";
+import { useConvertDropzone } from "@/lib/hooks/useDropzone";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import {
@@ -11,18 +11,14 @@ import {
 import { FileRecord } from "@/lib/db/types";
 import { queries } from "@/lib/db/actions/queries";
 import { useSearch } from "@tanstack/react-router";
+import { useFfmpegCtx } from "@/lib/context/ffmpeg-context";
 
 type ConvertCardProps = {
-  handleTranscode: (files: FileRecord[], targetExtension: string) => void;
   targetExtension: string;
-  loading: boolean;
 };
 
-export default function ConvertCard({
-  handleTranscode,
-  targetExtension,
-  loading,
-}: ConvertCardProps) {
+export default function ConvertCard({ targetExtension }: ConvertCardProps) {
+  const { handleTranscode, processing: loading } = useFfmpegCtx();
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
     useConvertDropzone();
   const searchParams = useSearch({ from: "__root__" });

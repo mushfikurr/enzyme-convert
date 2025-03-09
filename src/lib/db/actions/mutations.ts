@@ -9,7 +9,8 @@ type UpdateFileInfoParams = Pick<
 export const mutations = {
   addFileRecord: async (file: File) => {
     try {
-      const fileData = await file.arrayBuffer();
+      const filePath = URL.createObjectURL(file);
+
       const id = await db.files.add({
         name: file.name,
         size: file.size,
@@ -19,7 +20,7 @@ export const mutations = {
         createdAt: new Date(),
         convertedName: null,
         convertedType: null,
-        fileData: fileData,
+        filePath: filePath,
       });
       return id;
     } catch (error) {
@@ -30,6 +31,11 @@ export const mutations = {
 
   removeFileRecord: async (fileId: number) => {
     try {
+      // Get the file record to revoke the object URL before deleting
+      const fileRecord = await db.files.get(fileId);
+      if (fileRecord && fileRecord.filePath) {
+        URL.revokeObjectURL(fileRecord.filePath);
+      }
       await db.files.delete(fileId);
     } catch (error) {
       console.error("Error removing file:", error);
@@ -43,6 +49,14 @@ export const mutations = {
         .where("status")
         .equals("completed")
         .toArray();
+
+      // Revoke all object URLs before deleting records
+      processedFileRecords.forEach((record) => {
+        if (record.filePath) {
+          URL.revokeObjectURL(record.filePath);
+        }
+      });
+
       await db.files.bulkDelete(processedFileRecords.map((file) => file.id));
     } catch (error) {
       console.error("Error removing completed files:", error);
@@ -53,6 +67,14 @@ export const mutations = {
   removeAllFileRecords: async () => {
     try {
       const fileRecords = await db.files.toArray();
+
+      // Revoke all object URLs before deleting records
+      fileRecords.forEach((record) => {
+        if (record.filePath) {
+          URL.revokeObjectURL(record.filePath);
+        }
+      });
+
       await db.files.bulkDelete(fileRecords.map((file) => file.id));
     } catch (error) {
       console.error("Error removing all files:", error);

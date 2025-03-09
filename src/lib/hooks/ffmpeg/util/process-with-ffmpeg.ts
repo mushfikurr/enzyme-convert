@@ -1,7 +1,6 @@
 import { getFileFromFileRecord } from "@/lib/db/actions/util";
 import { downloadFileData } from "@/lib/utils";
 import { FileRecord } from "@/lib/db/types";
-import mime from "mime";
 import { mutations } from "@/lib/db/actions/mutations";
 import { fetchFile } from "@ffmpeg/util";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
@@ -16,7 +15,7 @@ export const processWithFFmpeg = async (
   ) => Promise<void>,
   targetExtension: string
 ) => {
-  const sourceFile = getFileFromFileRecord(fileRecord);
+  const sourceFile = await getFileFromFileRecord(fileRecord);
   const sourceFileName = sourceFile.name;
   const targetFileName = sourceFileName.replace(/\.[^/.]+$/, targetExtension);
 
@@ -31,7 +30,7 @@ export const processWithFFmpeg = async (
       progress: 100,
       status: "completed",
       convertedName: targetFileName,
-      convertedType: mime.getType(targetFileName),
+      convertedType: targetExtension,
     });
 
     return fileData;
@@ -48,12 +47,11 @@ export const handleFFmpegAction = async (
     sourceFileName: string,
     targetFileName: string
   ) => Promise<void>,
-  targetExtension: string
+  targetExtension: string,
+  setProcessing: (processing: boolean) => void
 ) => {
-  console.log("promise all", files);
   return await Promise.all(
     files.map(async (fileRecord) => {
-      console.log("file record", fileRecord);
       await handleAction(
         processWithFFmpeg,
         fileRecord.id!,
@@ -63,5 +61,5 @@ export const handleFFmpegAction = async (
         targetExtension
       );
     })
-  );
+  ).finally(() => setProcessing(false));
 };

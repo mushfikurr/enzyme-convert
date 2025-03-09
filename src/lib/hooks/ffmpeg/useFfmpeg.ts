@@ -14,7 +14,7 @@ export type FFmpegRefType = React.RefObject<FFmpeg>;
 export function useFfmpeg() {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [processing, setProcessing] = useState<boolean>(false);
-  const [ffmpegStatus, setFfmpegStatus] = useState<string>();
+  const [log, setLog] = useState<string[]>([]);
   const ffmpegRef = useRef(new FFmpeg());
 
   const load = async () => {
@@ -24,8 +24,7 @@ export function useFfmpeg() {
       : "https://unpkg.com/@ffmpeg/core@0.12.10/dist/esm";
     const ffmpeg = ffmpegRef.current;
     ffmpeg.on("log", ({ message }) => {
-      console.log("log", message);
-      setFfmpegStatus(message);
+      setLog((prev) => [...prev, message]);
     });
 
     ffmpeg.on("progress", async ({ progress, time }) => {
@@ -68,9 +67,12 @@ export function useFfmpeg() {
         files,
         ffmpegRef.current,
         transcode(ffmpegRef.current),
-        targetExtension
+        targetExtension,
+        setProcessing
       ),
   };
 
-  return { ...actions, processing, loaded, status: ffmpegStatus };
+  return { ...actions, processing, loaded, log, setLog };
 }
+
+export type UseFfmpegReturnType = ReturnType<typeof useFfmpeg>;

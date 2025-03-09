@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { allowedExtensions } from "../hooks/ffmpeg/allowed-extensions";
 
-const MAX_FILE_SIZE = 2 * Math.pow(2, 30); // 2GB limit for debugging
+const MAX_FILE_SIZE = 250 * 1024 * 1024;
 
 export const schema = {
   conversionParams: z.object({

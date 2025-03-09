@@ -10,10 +10,16 @@ export const queries = {
         throw new Error("File not found in the database.");
       }
 
-      const { name, type, fileData } = fileRecord;
+      const response = await fetch(fileRecord.filePath);
+      if (!response.ok) {
+        throw new Error("Failed to fetch the file from the stored path.");
+      }
 
-      const blob = new Blob([fileData], { type });
-      const file = new File([blob], name, { type, lastModified: Date.now() });
+      const blob = await response.blob();
+      const file = new File([blob], fileRecord.name, {
+        type: fileRecord.type,
+        lastModified: Date.now(),
+      });
 
       return file;
     } catch (error) {
