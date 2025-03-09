@@ -8,10 +8,10 @@ import { Toaster } from "@/components/ui/sonner";
 import { FfmpegProvider } from "@/lib/context/ffmpeg-context";
 import db from "@/lib/db/db";
 import { schema } from "@/lib/schema/conversion-types";
-import "@fontsource-variable/geist-mono";
 import { createRootRoute, stripSearchParams } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { useEffect } from "react";
+import "@fontsource-variable/geist-mono";
 
 const DEFAULT_CONVERSION_PARAMS = {
   source: "",

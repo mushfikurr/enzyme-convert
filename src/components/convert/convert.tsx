@@ -1,5 +1,8 @@
+import { useFfmpegCtx } from "@/lib/context/ffmpeg-context";
+import { queries } from "@/lib/db/actions/queries";
 import { useConvertDropzone } from "@/lib/hooks/useDropzone";
 import { cn } from "@/lib/utils";
+import { useSearch } from "@tanstack/react-router";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -8,10 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { FileRecord } from "@/lib/db/types";
-import { queries } from "@/lib/db/actions/queries";
-import { useSearch } from "@tanstack/react-router";
-import { useFfmpegCtx } from "@/lib/context/ffmpeg-context";
 
 type ConvertCardProps = {
   targetExtension: string;

@@ -13,10 +13,8 @@ export function FileCard({ ...props }: FileRecord) {
       <div className="flex items-center space-x-4">
         <File className="h-4 w-4" />
         <div className="flex-1 flex items-center">
-          <div className="space-y-1 grow">
-            <p className="text-sm font-medium leading-none max-w-[200px] truncate">
-              {name}
-            </p>
+          <div className="grow">
+            <p className="text-sm font-medium max-w-[200px] truncate">{name}</p>
             <span className="flex items-center gap-2 text-sm text-muted-foreground">
               {status === "in progress" && (
                 <Loader className="animate-spin h-4 w-4" />
