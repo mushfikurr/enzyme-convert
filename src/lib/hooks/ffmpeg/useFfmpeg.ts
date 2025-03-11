@@ -7,7 +7,7 @@ import { transcode } from "./actions/transcode";
 import { canSharedArrayBuffersRun } from "./can-shared-array-buffers-run";
 import { queries } from "@/lib/db/actions/queries";
 import { mutations } from "@/lib/db/actions/mutations";
-import { handleFFmpegAction } from "./util/process-with-ffmpeg";
+import { processAllFilesWithFfmpeg } from "./util/process-with-ffmpeg";
 
 export type FFmpegRefType = React.RefObject<FFmpeg>;
 
@@ -63,7 +63,7 @@ export function useFfmpeg() {
 
   const actions = {
     handleTranscode: async (files: FileRecord[], targetExtension: string) =>
-      await handleFFmpegAction(
+      await processAllFilesWithFfmpeg(
         files,
         ffmpegRef.current,
         transcode(ffmpegRef.current),

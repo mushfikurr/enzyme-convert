@@ -1,9 +1,9 @@
-import { getFileFromFileRecord } from "@/lib/db/actions/util";
-import { downloadFileData } from "@/lib/utils";
-import { FileRecord } from "@/lib/db/types";
 import { mutations } from "@/lib/db/actions/mutations";
-import { fetchFile } from "@ffmpeg/util";
+import { getFileFromFileRecord } from "@/lib/db/actions/util";
+import { FileRecord } from "@/lib/db/types";
+import { downloadFileData } from "@/lib/utils";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { fetchFile } from "@ffmpeg/util";
 import { handleAction } from "./handle-action";
 
 export const processWithFFmpeg = async (
@@ -40,7 +40,7 @@ export const processWithFFmpeg = async (
   }
 };
 
-export const handleFFmpegAction = async (
+export const processAllFilesWithFfmpeg = async (
   files: FileRecord[],
   ffmpeg: FFmpeg,
   ffmpegCommand: (
