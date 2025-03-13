@@ -59,6 +59,8 @@ pnpm build
 
 ## TODO
 
+- Retry mechanism for failed conversions
+- Site attribution overrides console button on mobile
 - Allow cancellation of conversion  
 - Display recent conversions from Dexie  
 - Sound effects ???  
