@@ -10,9 +10,4 @@ Built with Vite, React, and TypeScript.
 - Display recent conversions from dexie
 - Sound effects ???
 - Type all available extensions?
-- 
----
-
-## Notes for myself:
-
 ---
