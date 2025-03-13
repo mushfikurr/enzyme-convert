@@ -1,6 +1,6 @@
-# Enzyme
+# enzyme
 
-Enzyme is a universal file converter that runs entirely in your browser using `ffmpeg.wasm`. No uploads, no nonsense. Everything stays local.
+enzyme is a universal file converter that runs entirely in your browser using `ffmpeg.wasm`. No uploads, no nonsense. Everything stays local.
 
 Built with Vite, React, and TypeScript.
 
@@ -65,6 +65,8 @@ pnpm build
 - Type all available extensions  
 
 ## Contributing
+
+Contributions are welcome!
 
 1. Fork the repository  
 2. Clone your fork  
